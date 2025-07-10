@@ -1,4 +1,3 @@
-"use server";
 import { FC } from "react";
 
 const ErrorPage: FC = () => {

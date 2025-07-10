@@ -27,5 +27,18 @@ export interface ICategory {
   id: number;
   createdAt: string;
   updatedAt: string;
-  transactions: [];
+  transactions: ITransaction[];
+}
+
+export interface ITransactionFormData {
+  title: string;
+  amount: number;
+  category: ICategory | string;
+  type: "income" | "expense";
+}
+
+export interface ITransaction extends ITransactionFormData {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
 }

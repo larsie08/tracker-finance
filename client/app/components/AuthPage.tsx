@@ -30,8 +30,7 @@ const AuthPage = () => {
         setIsLogin(!isLogin);
       }
     } catch (err: any) {
-      const error = err.response?.data.message;
-      toast.error(error.toString());
+      toast.error(err);
     }
   };
 
@@ -46,8 +45,7 @@ const AuthPage = () => {
         router.push("/");
       }
     } catch (err: any) {
-      const error = err.response?.data.message;
-      toast.error(error.toString());
+      toast.error(err);
     }
   };
 

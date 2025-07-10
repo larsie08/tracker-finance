@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 
 import { ICategory } from "@/types/types";
 
@@ -12,7 +12,7 @@ type CategoriesPageProps = {
   categories: ICategory[];
 };
 
-const CategoriesPage: FC<CategoriesPageProps> = ({ categories }) => {
+const CategoriesProvider: FC<CategoriesPageProps> = ({ categories }) => {
   const [visible, setVisibleModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [categoryId, setCategoryId] = useState<number | null>(null);
@@ -31,28 +31,25 @@ const CategoriesPage: FC<CategoriesPageProps> = ({ categories }) => {
 
   return (
     <>
-      <div className="mt-10 rounded-md bg-slate-800 p-4">
-        <h1>Your category list:</h1>
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          {categories.map((category) => (
-            <CategoryItem
-              category={category}
-              key={category.title}
-              openModal={openModal}
-            />
-          ))}
-        </div>
-
-        {/* Add Category */}
-
-        <button
-          onClick={() => setVisibleModal(true)}
-          className="mt-5 flex max-w-fit items-center gap-2 text-white/50 hover:text-white"
-        >
-          <FaPlus />
-          <span>Create a new category</span>
-        </button>
+      <div className="mt-2 flex flex-wrap items-center gap-2">
+        {categories.map((category) => (
+          <CategoryItem
+            category={category}
+            key={category.title}
+            openModal={openModal}
+          />
+        ))}
       </div>
+
+      {/* Add Category */}
+
+      <button
+        onClick={() => setVisibleModal(true)}
+        className="mt-5 flex max-w-fit items-center gap-2 text-white/50 hover:text-white"
+      >
+        <FaPlus />
+        <span>Create a new category</span>
+      </button>
 
       {/* Category Modal */}
       {visible && (
@@ -67,4 +64,4 @@ const CategoriesPage: FC<CategoriesPageProps> = ({ categories }) => {
   );
 };
 
-export default CategoriesPage;
+export default CategoriesProvider;
