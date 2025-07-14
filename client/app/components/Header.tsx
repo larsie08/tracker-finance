@@ -11,7 +11,6 @@ import { FaBtc, FaSignOutAlt } from "react-icons/fa";
 import { logoutAction } from "../actions";
 
 const navLinks = [
-  { href: "/", name: "Home" },
   { href: "/transactions", name: "Transactions" },
   { href: "/categories", name: "Categories" },
 ];

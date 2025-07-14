@@ -34,7 +34,7 @@ export const getCookieTokenAction = async (): Promise<string> => {
   return (await cookies()).get("token")?.value || "";
 };
 
-export const transactionAction = async (): Promise<{
+export const transactionsAction = async (): Promise<{
   categories: ICategory[];
   transactions: ITransaction[];
 }> => {
@@ -66,4 +66,38 @@ export const transactionDeleteAction = async (
   const token = await getCookieTokenAction();
 
   await instance(token).delete(`/transactions/transaction/${transactionId}`);
+};
+
+export const transactionsPaginationAction = async (
+  page: number,
+  limit: number,
+): Promise<ITransaction[]> => {
+  const token = await getCookieTokenAction();
+
+  const { data } = await instance(token).get<ITransaction[]>(
+    `/transactions/pagination?page=${page}&limit=${limit}`,
+  );
+
+  return data;
+};
+
+export const transactionsTotalSumAction = async (): Promise<{
+  totalIncome: number;
+  totalExpense: number;
+}> => {
+  const token = await getCookieTokenAction();
+
+  const { data: totalIncome } = await instance(token).get<number>(
+    "/transactions/income/find",
+  );
+  const { data: totalExpense } = await instance(token).get<number>(
+    "/transactions/expense/find",
+  );
+
+  const data = {
+    totalIncome,
+    totalExpense,
+  };
+
+  return data;
 };

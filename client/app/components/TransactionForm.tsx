@@ -1,12 +1,15 @@
 "use client";
 
-import { ICategory } from "@/types/types";
 import { FC, useState } from "react";
-import { FaPlus } from "react-icons/fa";
-import CategoryModal from "./CategoryModal";
 import { SubmitHandler, useForm } from "react-hook-form";
+
+import { ICategory } from "@/types/types";
 import { transactionSubmitAction } from "../actions";
+
+import CategoryModal from "./CategoryModal";
+import { FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 type TransactionFormData = {
   title: string;
@@ -16,11 +19,8 @@ type TransactionFormData = {
 };
 
 const TransactionForm: FC<{ categories: ICategory[] }> = ({ categories }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TransactionFormData>();
+  const { register, handleSubmit } = useForm<TransactionFormData>();
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<TransactionFormData> = async (data) => {
     const transaction = {
@@ -33,6 +33,7 @@ const TransactionForm: FC<{ categories: ICategory[] }> = ({ categories }) => {
     try {
       await transactionSubmitAction(transaction);
       toast.success("Transaction added");
+      router.refresh();
     } catch (error) {
       console.log(error);
       toast.error("Transaction not added");

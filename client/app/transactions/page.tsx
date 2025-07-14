@@ -1,12 +1,16 @@
 import { FC } from "react";
 
-import { transactionAction } from "../actions";
+import { transactionsAction, transactionsTotalSumAction } from "../actions";
 
 import TransactionForm from "../components/TransactionForm";
 import TransactionTable from "../components/TransactionTable";
+import Chart from "../components/Chart";
 
+import { formatToUSD } from "@/utils/currency.helper";
+ 
 const Transactions: FC = async () => {
-  const { categories } = await transactionAction();
+  const { categories, transactions } = await transactionsAction();
+  const { totalExpense, totalIncome } = await transactionsTotalSumAction();
 
   return (
     <>
@@ -25,7 +29,7 @@ const Transactions: FC = async () => {
                 Total Income:
               </p>
               <p className="mt-2 rounded-sm bg-green-600 p-1 text-center">
-                1000$
+                {formatToUSD.format(totalIncome)}
               </p>
             </div>
             <div>
@@ -33,17 +37,18 @@ const Transactions: FC = async () => {
                 Total Expense:
               </p>
               <p className="mt-2 rounded-sm bg-red-500 p-1 text-center">
-                1000$
+                {formatToUSD.format(totalExpense)}
               </p>
             </div>
           </div>
           {/* Chart */}
+          <Chart totalExpense={totalExpense} totalIncome={totalIncome} />
         </div>
       </div>
 
       {/* Transactions Table */}
       <h1 className="my-5">
-        <TransactionTable />
+        <TransactionTable transactions={transactions} limit={5} />
       </h1>
     </>
   );

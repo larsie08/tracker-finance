@@ -1,9 +1,9 @@
-import AuthPage from "../components/AuthPage";
+import AuthForm from "../components/AuthForm";
 
 const Auth = () => {
   return (
     <div className="mt-40 flex flex-col items-center justify-center text-white">
-      <AuthPage />
+      <AuthForm />
     </div>
   );
 };

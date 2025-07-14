@@ -33,11 +33,12 @@ export interface ICategory {
 export interface ITransactionFormData {
   title: string;
   amount: number;
-  category: ICategory | string;
+  category: string;
   type: "income" | "expense";
 }
 
-export interface ITransaction extends ITransactionFormData {
+export interface ITransaction extends Omit<ITransactionFormData, "category"> {
+  category: ICategory;
   id: number;
   createdAt: string;
   updatedAt: string;

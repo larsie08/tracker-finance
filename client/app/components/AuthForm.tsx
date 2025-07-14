@@ -8,43 +8,50 @@ import { useAuthStore } from "@/store/authStore";
 
 import { toast } from "react-toastify";
 import { loginAction } from "../actions";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 const inputClassName =
   "rounded-md bg-tertiaryColor p-2 text-white shadow-md placeholder:text-white";
 
-const AuthPage = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+type AuthFormData = {
+  email: string;
+  password: string;
+};
+
+const AuthForm = () => {
+  const { register, handleSubmit } = useForm<AuthFormData>();
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const login = useAuthStore((state) => state.login);
   const router = useRouter();
 
-  const registrationHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+  const registrationHandler: SubmitHandler<AuthFormData> = async (
+    formData,
+  ): Promise<void> => {
     try {
-      e.preventDefault();
-      const data = await AuthService.registration({ email, password });
+      const responseData = await AuthService.registration(formData);
 
-      if (data) {
+      if (responseData) {
         toast.success("Account has been created");
         setIsLogin(!isLogin);
       }
     } catch (err: any) {
+      console.log(err);
       toast.error(err);
     }
   };
 
-  const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+  const loginHandler: SubmitHandler<AuthFormData> = async (formData) => {
     try {
-      e.preventDefault();
-      const data = await loginAction(email, password);
+      const responseData = await loginAction(formData.email, formData.password);
 
-      if (data) {
-        login(data);
+      if (responseData) {
+        login(responseData);
         toast.success("You logged in");
-        router.push("/");
+        router.push("/transactions");
       }
     } catch (err: any) {
+      console.log(err);
       toast.error(err);
     }
   };
@@ -56,20 +63,20 @@ const AuthPage = () => {
       </h1>
 
       <form
-        onSubmit={isLogin ? loginHandler : registrationHandler}
+        onSubmit={handleSubmit(isLogin ? loginHandler : registrationHandler)}
         className="mx-auto flex w-1/3 flex-col gap-5"
       >
         <input
           type="text"
           className={inputClassName}
           placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
+          {...register("email", { required: true })}
         />
         <input
           type="password"
           className={inputClassName}
           placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
+          {...register("password", { required: true })}
         />
 
         <button className="mx-auto flex items-center gap-2 rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-800">
@@ -98,4 +105,4 @@ const AuthPage = () => {
   );
 };
 
-export default AuthPage;
+export default AuthForm;
